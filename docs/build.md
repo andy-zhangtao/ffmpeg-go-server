@@ -83,6 +83,7 @@ target_link_libraries(ifade
 > `add_library`表示构建出静态库。
 
 最后需要提供构建脚本: `build.sh`. 这个脚本用来执行`cmake`和`make`，一般来说内容是下面的样子:
+
 ```shell script
 #!/bin/bash
 ln -s /root/ffmpeg_build/include/* /usr/local/include && \
