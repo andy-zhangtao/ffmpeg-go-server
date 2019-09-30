@@ -1,5 +1,5 @@
 # 构建
-> 如果构建C编写的Filter
+> 如何构建C编写的Filter
 
 为了方便调用`AVFilter`， `FFmpeg-go-server`会通过`cgo`链接构建出的静态库，生成可执行文件。 所以就涉及到两部分:
 
@@ -7,6 +7,8 @@
 + cgo链接静态库
 
 ### 构建静态库
+
+#### 工程说明
 
 编写filter complex完函数之后，应该会有两个文件:`xxx.c`和`xxx.h`。 
 
@@ -92,3 +94,11 @@ make
 一个完整的`AVFilter`目录结构如下:
 
 ![](https://tva1.sinaimg.cn/large/006y8mN6ly1g7hhrqq8l7j3056039aa1.jpg)
+
+#### 构建过程
+
+当上面的内容都准备之后，需要修改根目录下面的`Makefile`。 在文件中添加新`AVFilter`的目标。 
+
+构建`AVFilter`的静态库使用的是`vikings/ffmpeg-ubuntu`([镜像说明](http://dockerfile.docs.devexp.cn/ffmpeg-ubuntu.html)).
+
+使用此镜像时，需要指定`workdir`(配合`build.sh`)。
