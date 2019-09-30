@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	"ffmpeg-go-server/web/avfilter"
 	"github.com/gorilla/mux"
 )
 
@@ -46,10 +47,10 @@ func FFServer(port int) (*http.Server) {
 
 func register() (map[string]func(http.ResponseWriter, *http.Request)) {
 
-	funcMap := make(map[string]func(http.ResponseWriter,
-		*http.Request))
-
+	funcMap := make(map[string]func(http.ResponseWriter, *http.Request))
 	funcMap[wrapAPI("health")] = healthFunc
+
+	registerAVFilter(avfilter.Ifade{}, &funcMap)
 
 	return funcMap
 }
@@ -60,4 +61,10 @@ func healthFunc(w http.ResponseWriter, r *http.Request) {
 
 func wrapAPI(path string) string {
 	return fmt.Sprintf("%s%s", version, path)
+}
+
+func registerAVFilter(i IFilter, fmPtr *map[string]func(http.ResponseWriter, *http.Request)) {
+	p, f := i.RegisterInfo()
+	pp := wrapAPI(p)
+	(*fmPtr)[pp] = f
 }

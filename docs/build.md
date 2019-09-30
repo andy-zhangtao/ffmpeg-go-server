@@ -118,3 +118,11 @@ make
 
 `pkg-config`会尝试自动展开指定静态库的`cflags`和`libs`参数，而因为`libifade.a`是我们自己构建出来的，并没有`.pc`文件，所以无法通过`pkg-config`自动展开。需要单独指定其位置。
 如果构建过程中提示找不到某函数定义，那么需要根据实际情况修改`pkg-config`参数。
+
+---
+
+#### CGO 构建注意事项
+
+1. `.h`的位置，如果go文件中写的`include "xxx.h"`，那么就需要把头文件放到go文件那层。
+2. `.a`的位置，与`main.go`保持一致
+3. 构建前需要设置`export PKG_CONFIG_PATH=/root/ffmpeg_build/lib/pkgconfig/`
