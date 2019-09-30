@@ -102,3 +102,18 @@ make
 构建`AVFilter`的静态库使用的是`vikings/ffmpeg-ubuntu`([镜像说明](http://dockerfile.docs.devexp.cn/ffmpeg-ubuntu.html)).
 
 使用此镜像时，需要指定`workdir`(配合`build.sh`)。
+
+
+### CGO
+
+当成功构建静态库之后，就可以在`golang`中通过`cgo`调用静态库。 以下略过golang代码说明，只说明`cgo`构建参数。
+
+以`ifade`为例， 如果采用上面的`CMake`参数，最终构建的静态库名称应该是`libifade.a`。 假设此静态库与`main.go`在同级目录，并且在`main.go`中调用函数，那么CGO参数应该是:
+```cgo
+// #cgo pkg-config: libavfilter libavdevice
+// #cgo LDFLAGS: libifade.a
+// #include "copy.h"
+```
+
+`pkg-config`会尝试自动展开指定静态库的`cflags`和`libs`参数，而因为`libifade.a`是我们自己构建出来的，并没有`.pc`文件，所以无法通过`pkg-config`自动展开。需要单独指定其位置。
+如果构建过程中提示找不到某函数定义，那么需要根据实际情况修改`pkg-config`参数。
